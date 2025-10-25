@@ -82,13 +82,17 @@ def chat():
         return jsonify({
             'error': 'Rate limit exceeded. Please try again later'
         }), 429
-    except openai.error.APIError as e:
+    except openai.error.APIError:
+        # Log the error internally but don't expose details to client
+        app.logger.error('OpenAI API error occurred', exc_info=True)
         return jsonify({
-            'error': f'OpenAI API error: {str(e)}'
+            'error': 'OpenAI API error occurred. Please try again later'
         }), 500
-    except Exception as e:
+    except Exception:
+        # Log the error internally but don't expose details to client
+        app.logger.error('Unexpected server error occurred', exc_info=True)
         return jsonify({
-            'error': f'Server error: {str(e)}'
+            'error': 'An unexpected error occurred. Please try again later'
         }), 500
 
 @app.route('/api/models', methods=['GET'])
