@@ -224,6 +224,36 @@ Please submit an issue or PR to be added to this list.
 -   [x-cmd](https://x-cmd.com/mod/nu)
 -   [vfox](https://github.com/version-fox/vfox)
 
+## ChatGPT Integration
+
+This repository includes an experimental ChatGPT integration that allows users to interact with OpenAI's GPT models through a web interface. The integration provides:
+
+- **Backend API Server**: Python Flask server that communicates with OpenAI's API
+- **Web-based Frontend**: Simple HTML/JavaScript interface for chatting with GPT models
+- **Multiple Model Support**: GPT-4, GPT-4 Turbo, and GPT-3.5 Turbo
+- **Test Suite**: Automated tests to verify the integration
+
+For setup instructions and detailed documentation, see the [ChatGPT Integration README](chatgpt-integration/README.md).
+
+### Quick Start
+
+```bash
+# Install dependencies
+cd chatgpt-integration/backend
+pip install -r requirements.txt
+
+# Configure your OpenAI API key
+cp ../.env.example ../.env
+# Edit .env and add your API key
+
+# Start the backend server
+python server.py
+
+# Open frontend/index.html in your browser
+```
+
+**Note**: This integration requires an OpenAI API key and is a separate feature from the core Nushell shell functionality.
+
 ## Contributing
 
 See [Contributing](CONTRIBUTING.md) for details. Thanks to all the people who already contributed!
