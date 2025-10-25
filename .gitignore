@@ -56,3 +56,13 @@ tarpaulin-report.html
 
 # pre-commit-hooks
 .pre-commit-config.yaml
+
+# ChatGPT Integration - Environment variables with API keys
+chatgpt-integration/.env
+*.env
+!*.env.example
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
