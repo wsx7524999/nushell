@@ -4,6 +4,13 @@ This directory contains a complete ChatGPT integration that allows users to inte
 1. **Native Nushell Commands** - Use chatbot commands directly in your shell
 2. **Web Interface** - Interact via a browser-based frontend
 
+## 📚 Documentation
+
+- **[Quick Reference](QUICK_REFERENCE.md)** - Essential commands and quick tips
+- **[User Guide](NUSHELL_COMMANDS.md)** - Comprehensive guide with examples
+- **[FAQ](FAQ.md)** - Frequently asked questions and troubleshooting
+- **[Deployment Guide](DEPLOYMENT.md)** - Web interface deployment options
+
 ## 🚀 Quick Start (Nushell Commands)
 
 ### Prerequisites
