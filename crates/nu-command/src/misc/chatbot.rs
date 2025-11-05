@@ -1,5 +1,6 @@
 use nu_engine::command_prelude::*;
 use std::env;
+use std::io::Read;
 
 #[derive(Clone)]
 pub struct Chatbot;
@@ -121,7 +122,7 @@ fn chatbot_command(
             .ok_or_else(|| env::VarError::NotPresent)
     });
     
-    if api_key.is_err() || api_key.as_ref().unwrap().is_empty() {
+    if api_key.is_err() || api_key.as_ref().map_or(true, |k| k.is_empty()) {
         return Err(ShellError::GenericError {
             error: "OpenAI API key not configured".to_string(),
             msg: "Please set the OPENAI_API_KEY environment variable".to_string(),
@@ -166,8 +167,6 @@ fn call_openai_api(
     system_prompt: &str,
     user_message: &str,
 ) -> Result<String, String> {
-    use std::io::Read;
-    
     // Prepare the request payload
     let payload = serde_json::json!({
         "model": model,
@@ -193,16 +192,27 @@ fn call_openai_api(
     
     match response {
         Ok(resp) => {
-            let mut body = String::new();
-            resp.into_body().into_reader().read_to_string(&mut body)
+            let body = resp.into_body().into_reader()
+                .bytes()
+                .collect::<Result<Vec<u8>, _>>()
                 .map_err(|e| format!("Failed to read response: {}", e))?;
             
+            let body_str = String::from_utf8(body)
+                .map_err(|e| format!("Failed to decode response: {}", e))?;
+            
             // Parse the JSON response
-            let json: serde_json::Value = serde_json::from_str(&body)
+            let json: serde_json::Value = serde_json::from_str(&body_str)
                 .map_err(|e| format!("Failed to parse response: {}", e))?;
             
-            // Extract the message content
-            let content = json["choices"][0]["message"]["content"]
+            // Extract the message content with proper error handling
+            let choices = json["choices"].as_array()
+                .ok_or_else(|| "No choices in response".to_string())?;
+            
+            if choices.is_empty() {
+                return Err("Empty response from API".to_string());
+            }
+            
+            let content = choices[0]["message"]["content"]
                 .as_str()
                 .ok_or_else(|| "No response content found".to_string())?;
             

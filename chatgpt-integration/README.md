@@ -95,7 +95,7 @@ chatbot config [--status] [--setup]
 
 **Flags:**
 - `--status, -s`: Show the current chatbot configuration status
-- `--setup, -h`: Show detailed setup instructions
+- `--setup`: Show detailed setup instructions
 
 **Examples:**
 ```nushell

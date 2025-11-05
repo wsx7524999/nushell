@@ -20,7 +20,7 @@ impl Command for ChatbotConfig {
             .switch(
                 "setup",
                 "Show setup instructions for the chatbot",
-                None,  // Remove 'h' short flag as it conflicts with help
+                None,  // No short flag to avoid conflict with help (-h)
             )
             .category(Category::Misc)
     }
