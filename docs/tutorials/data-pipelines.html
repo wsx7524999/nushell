@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Data Pipelines - Tutorials - Nushell</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <style>
+        .tutorial-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .tutorial-content h2 {
+            color: var(--primary-color);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.75rem;
+        }
+        .tutorial-content h3 {
+            color: var(--text-dark);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+        .tutorial-content p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            color: var(--text-light);
+        }
+        .tutorial-content code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: var(--primary-color);
+            font-size: 0.9em;
+        }
+        .tutorial-content pre {
+            background: #2d3748;
+            color: #f7fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        .tutorial-content pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        .tutorial-content ul {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+        .tutorial-content li {
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            color: var(--secondary-color);
+        }
+        .tip-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+        .tip-box strong {
+            color: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>🚀 Nushell</h1>
+            </div>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="../">Home</a></li>
+                <li><a href="../blog/">Blog</a></li>
+                <li><a href="./" class="active">Tutorials</a></li>
+                <li><a href="../chatbot/">Live Chatbot</a></li>
+                <li><a href="https://github.com/wsx7524999/nushell" target="_blank">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1 class="page-title">Mastering Data Pipelines</h1>
+        <p class="page-subtitle">🔄 Intermediate • ⏱️ 25 minutes</p>
+    </header>
+
+    <article class="tutorial-content">
+        <a href="./" class="back-link">← Back to Tutorials</a>
+        
+        <p>
+            Pipelines are the heart of Nushell. In this tutorial, you'll learn how to chain commands 
+            together to filter, transform, and analyze data efficiently. These skills will make you 
+            significantly more productive with Nushell.
+        </p>
+
+        <h2>1. Understanding Pipelines</h2>
+        <p>
+            In Nushell, data flows through pipelines using the <code>|</code> operator. Unlike traditional 
+            shells that pass text, Nushell passes structured data—tables, records, and lists—through the pipeline.
+        </p>
+        <pre><code># Simple pipeline: list files and filter
+ls | where size > 1mb</code></pre>
+
+        <h2>2. The where Command</h2>
+        <p>
+            The <code>where</code> command filters data based on conditions:
+        </p>
+
+        <h3>Basic Filtering</h3>
+        <pre><code># Filter by exact match
+ls | where type == "file"
+
+# Filter by comparison
+ls | where size > 1mb
+
+# Filter by string pattern
+ls | where name =~ ".txt"</code></pre>
+
+        <h3>Complex Conditions</h3>
+        <pre><code># Multiple conditions with 'and'
+ls | where type == "file" and size > 1mb
+
+# Multiple conditions with 'or'
+ls | where name =~ ".txt" or name =~ ".md"
+
+# Negation with 'not'
+ls | where not (type == "dir")</code></pre>
+
+        <h2>3. The select Command</h2>
+        <p>
+            Use <code>select</code> to choose which columns to display:
+        </p>
+        <pre><code># Select single column
+ls | select name
+
+# Select multiple columns
+ls | select name size modified
+
+# Rename columns while selecting
+ls | select name file_size:size</code></pre>
+
+        <h2>4. Transforming Data with each</h2>
+        <p>
+            The <code>each</code> command applies an operation to each item in the pipeline:
+        </p>
+        <pre><code># Convert all file names to uppercase
+ls | select name | each { |it| $it.name | str upcase }
+
+# Add .backup extension to all files
+ls | select name | each { |it| $it.name + ".backup" }
+
+# Calculate size in MB for each file
+ls | each { |it| $it.size / 1mb }</code></pre>
+
+        <h2>5. Working with JSON Data</h2>
+        
+        <h3>Reading JSON</h3>
+        <pre><code># Open and parse JSON file
+open data.json
+
+# Example: users.json with array of users
+open users.json | where age > 25 | select name email</code></pre>
+
+        <h3>Transforming JSON</h3>
+        <pre><code># Extract nested data
+open config.json | get database.host
+
+# Filter array within JSON
+open api-response.json | get results | where status == "active"</code></pre>
+
+        <h3>Creating JSON</h3>
+        <pre><code># Convert table to JSON
+ls | select name size | to json
+
+# Save as JSON file
+ls | select name size | to json | save output.json</code></pre>
+
+        <h2>6. Working with CSV Data</h2>
+        
+        <h3>Reading CSV</h3>
+        <pre><code># Open CSV file (automatically parsed as table)
+open sales.csv
+
+# Filter and analyze
+open sales.csv | where amount > 1000 | get total | math sum</code></pre>
+
+        <h3>Converting Formats</h3>
+        <pre><code># CSV to JSON
+open data.csv | to json | save data.json
+
+# JSON to CSV
+open data.json | to csv | save data.csv</code></pre>
+
+        <h2>7. Aggregation and Math</h2>
+        
+        <h3>Basic Math Operations</h3>
+        <pre><code># Sum of all file sizes
+ls | get size | math sum
+
+# Average file size
+ls | get size | math avg
+
+# Find maximum
+ls | get size | math max
+
+# Find minimum
+ls | get size | math min</code></pre>
+
+        <h3>Grouping Data</h3>
+        <pre><code># Group files by type
+ls | group-by type
+
+# Count items in each group
+ls | group-by type | each { |key, values| { type: $key, count: ($values | length) } }</code></pre>
+
+        <h2>8. The reduce Command</h2>
+        <p>
+            <code>reduce</code> combines all values in a list into a single value:
+        </p>
+        <pre><code># Sum numbers manually
+[1 2 3 4 5] | reduce { |it, acc| $it + $acc }
+
+# Concatenate strings
+["Hello" "," " " "World"] | reduce { |it, acc| $it + $acc }
+
+# Find maximum custom logic
+ls | get size | reduce { |it, acc| if $it > $acc { $it } else { $acc } }</code></pre>
+
+        <h2>9. Sorting and Ordering</h2>
+        
+        <h3>Simple Sorting</h3>
+        <pre><code># Sort by name
+ls | sort-by name
+
+# Sort by size (descending)
+ls | sort-by size --reverse
+
+# Sort by multiple columns
+ls | sort-by type size</code></pre>
+
+        <h3>Custom Sorting</h3>
+        <pre><code># Sort with custom logic
+ls | sort-by { |a, b| $a.size < $b.size }</code></pre>
+
+        <h2>10. Limiting Results</h2>
+        <pre><code># Get first 5 items
+ls | first 5
+
+# Get last 3 items
+ls | last 3
+
+# Skip first 10 items
+ls | skip 10
+
+# Take items from middle
+ls | skip 5 | first 5</code></pre>
+
+        <h2>11. Real-World Examples</h2>
+        
+        <h3>Example 1: Find Large Files</h3>
+        <pre><code># Find files larger than 10MB, sort by size, show top 10
+ls **/* 
+  | where type == "file" and size > 10mb 
+  | sort-by size --reverse 
+  | first 10 
+  | select name size</code></pre>
+
+        <h3>Example 2: Analyze Log Files</h3>
+        <pre><code># Parse and analyze JSON logs
+open app.log 
+  | lines 
+  | where $it =~ "ERROR" 
+  | parse "{timestamp} {level} {message}"
+  | where level == "ERROR"
+  | length</code></pre>
+
+        <h3>Example 3: Process CSV Sales Data</h3>
+        <pre><code># Calculate total sales by region
+open sales.csv 
+  | group-by region 
+  | each { |key, values| 
+      { 
+        region: $key, 
+        total: ($values | get amount | math sum),
+        count: ($values | length)
+      } 
+    }
+  | sort-by total --reverse</code></pre>
+
+        <h3>Example 4: Clean and Transform Data</h3>
+        <pre><code># Extract email domains from user data
+open users.json 
+  | select email 
+  | each { |it| $it.email | split row "@" | last }
+  | uniq 
+  | sort</code></pre>
+
+        <h2>12. Pipeline Best Practices</h2>
+        <ul>
+            <li><strong>Filter Early:</strong> Use <code>where</code> early in the pipeline to reduce data</li>
+            <li><strong>Select What You Need:</strong> Use <code>select</code> to keep only necessary columns</li>
+            <li><strong>Break Complex Pipelines:</strong> Split long pipelines across multiple lines for readability</li>
+            <li><strong>Test Incrementally:</strong> Build pipelines step by step, testing each addition</li>
+            <li><strong>Use Variables:</strong> Store intermediate results in variables for complex operations</li>
+        </ul>
+
+        <div class="tip-box">
+            <strong>💡 Pro Tip:</strong> Press Ctrl+C to interrupt a long-running pipeline. Use 
+            <code>first</code> to test pipelines on small datasets before running on all data.
+        </div>
+
+        <h2>13. Next Steps</h2>
+        <p>
+            Now that you've mastered pipelines, explore these topics:
+        </p>
+        <ul>
+            <li><a href="ai-integration-setup.html" style="color: var(--primary-color);">Set Up AI Integration</a> - 
+                Get AI help with complex pipelines</li>
+            <li><a href="../chatbot/" style="color: var(--primary-color);">Try the Live Chatbot</a> - 
+                Ask questions about specific pipeline scenarios</li>
+        </ul>
+
+        <a href="./" class="back-link">← Back to Tutorials</a>
+    </article>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Nushell Project. Licensed under MIT License.</p>
+            <div class="footer-links">
+                <a href="https://github.com/wsx7524999/nushell">GitHub</a>
+                <a href="https://discord.gg/NtAbbGn">Discord</a>
+                <a href="https://www.nushell.sh">Official Site</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
