@@ -28,6 +28,8 @@ jobs:
     # Restrict to repository owner only
     if: github.repository == 'wsx7524999/nushell' && github.actor == 'wsx7524999'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout repository
