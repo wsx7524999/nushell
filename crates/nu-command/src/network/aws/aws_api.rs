@@ -17,36 +17,36 @@ impl Command for AwsApi {
             .required(
                 "service",
                 SyntaxShape::String,
-                "AWS service name (e.g., 's3', 'ec2')",
+                "AWS service name (e.g., 's3', 'ec2').",
             )
             .required(
                 "region",
                 SyntaxShape::String,
-                "AWS region (e.g., 'us-east-1')",
+                "AWS region (e.g., 'us-east-1').",
             )
             .required(
                 "method",
                 SyntaxShape::String,
-                "HTTP method (GET, POST, PUT, DELETE)",
+                "HTTP method (GET, POST, PUT, DELETE).",
             )
-            .required("path", SyntaxShape::String, "API endpoint path")
+            .required("path", SyntaxShape::String, "API endpoint path.")
             .named(
                 "body",
                 SyntaxShape::String,
-                "Request body for POST/PUT requests",
+                "Request body for POST/PUT requests.",
                 Some('b'),
             )
             .named(
                 "headers",
                 SyntaxShape::Record(vec![]),
-                "Additional headers",
+                "Additional headers.",
                 Some('H'),
             )
             .category(Category::Network)
     }
 
     fn description(&self) -> &str {
-        "Make authenticated AWS REST API requests (requires AWS credentials in environment)"
+        "Make authenticated AWS REST API requests (requires AWS credentials in environment)."
     }
 
     fn extra_description(&self) -> &str {
@@ -58,7 +58,7 @@ This functionality is only available to the repository owner through GitHub Secr
     }
 
     fn search_terms(&self) -> Vec<&str> {
-        vec!["aws", "api", "cloud", "amazon"]
+        vec!["cloud", "amazon", "s3", "ec2"]
     }
 
     fn run(
