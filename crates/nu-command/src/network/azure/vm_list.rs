@@ -90,8 +90,7 @@ Authentication:
         let client = create_azure_client()?;
         
         let url = format!(
-            "https://management.azure.com/subscriptions/{}/providers/Microsoft.Compute/virtualMachines?api-version={}",
-            subscription, api_version
+            "https://management.azure.com/subscriptions/{subscription}/providers/Microsoft.Compute/virtualMachines?api-version={api_version}"
         );
 
         let response = azure_get_request(&client, &url, &token, call.head)?;

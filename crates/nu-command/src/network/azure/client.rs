@@ -69,11 +69,11 @@ pub fn azure_get_request(
 ) -> Result<serde_json::Value, ShellError> {
     let mut response = client
         .get(url)
-        .header("Authorization", &format!("Bearer {}", token))
+        .header("Authorization", &format!("Bearer {token}"))
         .header("Content-Type", "application/json")
         .call()
         .map_err(|e| ShellError::NetworkFailure {
-            msg: format!("Azure API request failed: {}", e),
+            msg: format!("Azure API request failed: {e}"),
             span,
         })?;
     
@@ -82,7 +82,7 @@ pub fn azure_get_request(
         let body = response.body_mut().read_to_string()
             .unwrap_or_else(|_| "Failed to read error response body from Azure API".to_string());
         return Err(ShellError::NetworkFailure {
-            msg: format!("Azure API returned status {}: {}", status, body),
+            msg: format!("Azure API returned status {status}: {body}"),
             span,
         });
     }
@@ -90,7 +90,7 @@ pub fn azure_get_request(
     response.body_mut().read_json()
         .map_err(|e| ShellError::GenericError {
             error: "Failed to parse Azure API response".into(),
-            msg: format!("JSON parsing error: {}", e),
+            msg: format!("JSON parsing error: {e}"),
             span: Some(span),
             help: Some("The response from Azure API was not valid JSON".into()),
             inner: vec![],
