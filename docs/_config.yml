@@ -1,0 +1,38 @@
+# Site settings
+title: Nushell - A Modern Shell with AI Integration
+description: >-
+  A new type of shell with powerful AI capabilities. Explore our blog, tutorials,
+  and interactive chatbot to experience the future of command-line interfaces.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://wsx7524999.github.io/nushell" # the base hostname & protocol for your site
+
+# Build settings
+markdown: kramdown
+theme: minima
+
+# Navigation
+navigation:
+  - title: Home
+    url: /
+  - title: Blog
+    url: /blog/
+  - title: Tutorials
+    url: /tutorials/
+  - title: Live Chatbot
+    url: /chatbot/
+  - title: GitHub
+    url: https://github.com/wsx7524999/nushell
+
+# Social links
+github_username: wsx7524999
+discord_url: https://discord.gg/NtAbbGn
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setting Up AI Integration - Tutorials - Nushell</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <style>
+        .tutorial-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .tutorial-content h2 {
+            color: var(--primary-color);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.75rem;
+        }
+        .tutorial-content h3 {
+            color: var(--text-dark);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+        .tutorial-content p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            color: var(--text-light);
+        }
+        .tutorial-content code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: var(--primary-color);
+            font-size: 0.9em;
+        }
+        .tutorial-content pre {
+            background: #2d3748;
+            color: #f7fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        .tutorial-content pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        .tutorial-content ul, .tutorial-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+        .tutorial-content li {
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            color: var(--secondary-color);
+        }
+        .warning-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+        .warning-box strong {
+            color: #e65100;
+        }
+        .tip-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+        .tip-box strong {
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>🚀 Nushell</h1>
+            </div>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="../">Home</a></li>
+                <li><a href="../blog/">Blog</a></li>
+                <li><a href="./" class="active">Tutorials</a></li>
+                <li><a href="../chatbot/">Live Chatbot</a></li>
+                <li><a href="https://github.com/wsx7524999/nushell" target="_blank">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1 class="page-title">Setting Up AI Integration</h1>
+        <p class="page-subtitle">🤖 Intermediate • ⏱️ 20 minutes</p>
+    </header>
+
+    <article class="tutorial-content">
+        <a href="./" class="back-link">← Back to Tutorials</a>
+        
+        <p>
+            Learn how to set up and use the ChatGPT integration in Nushell. This powerful feature brings 
+            AI-powered assistance directly to your command line, helping you write commands, debug issues, 
+            and learn Nushell more efficiently.
+        </p>
+
+        <h2>1. Prerequisites</h2>
+        <p>
+            Before starting, make sure you have:
+        </p>
+        <ul>
+            <li>Nushell installed (see <a href="getting-started.html" style="color: var(--primary-color);">Getting Started</a>)</li>
+            <li>Python 3.8 or higher</li>
+            <li>pip (Python package manager)</li>
+            <li>An OpenAI API key (<a href="https://platform.openai.com/api-keys" target="_blank" style="color: var(--primary-color);">Get one here</a>)</li>
+        </ul>
+
+        <h2>2. Getting Your OpenAI API Key</h2>
+        <ol>
+            <li>Visit <a href="https://platform.openai.com/api-keys" target="_blank" style="color: var(--primary-color);">OpenAI's API Keys page</a></li>
+            <li>Sign in or create an account</li>
+            <li>Click "Create new secret key"</li>
+            <li>Give it a name (e.g., "Nushell Integration")</li>
+            <li>Copy the key immediately—you won't be able to see it again!</li>
+        </ol>
+
+        <div class="warning-box">
+            <strong>⚠️ Security Warning:</strong> Never share your API key or commit it to version control. 
+            Treat it like a password—anyone with your key can use your OpenAI account.
+        </div>
+
+        <h2>3. Installing the Backend</h2>
+        
+        <h3>Navigate to the Integration Directory</h3>
+        <pre><code>cd chatgpt-integration/backend</code></pre>
+
+        <h3>Install Python Dependencies</h3>
+        <pre><code>pip install -r requirements.txt</code></pre>
+
+        <p>
+            This installs Flask (the web framework) and the OpenAI Python library.
+        </p>
+
+        <h2>4. Configuring the Environment</h2>
+        
+        <h3>Create Environment File</h3>
+        <pre><code>cd ..
+cp .env.example .env</code></pre>
+
+        <h3>Edit the .env File</h3>
+        <p>
+            Open the <code>.env</code> file in your favorite text editor and add your API key:
+        </p>
+        <pre><code>OPENAI_API_KEY=sk-your-actual-api-key-here
+PORT=5000
+DEBUG=false</code></pre>
+
+        <div class="tip-box">
+            <strong>💡 Tip:</strong> The .env file is already in .gitignore, so it won't be accidentally 
+            committed to version control.
+        </div>
+
+        <h2>5. Starting the Backend Server</h2>
+        <pre><code>cd backend
+python server.py</code></pre>
+
+        <p>
+            You should see output indicating the server is running:
+        </p>
+        <pre><code> * Running on http://127.0.0.1:5000
+ * Press CTRL+C to quit</code></pre>
+
+        <h2>6. Accessing the Frontend</h2>
+        
+        <h3>Option 1: Direct File Access</h3>
+        <p>
+            Open <code>frontend/index.html</code> directly in your web browser by double-clicking the file.
+        </p>
+
+        <h3>Option 2: Local Web Server (Recommended)</h3>
+        <p>
+            In a new terminal window:
+        </p>
+        <pre><code>cd chatgpt-integration/frontend
+python -m http.server 8000</code></pre>
+
+        <p>
+            Then open your browser to <code>http://localhost:8000</code>
+        </p>
+
+        <h2>7. Using the Chatbot</h2>
+        
+        <h3>Basic Usage</h3>
+        <ol>
+            <li>Select your preferred model (GPT-4, GPT-4 Turbo, or GPT-3.5)</li>
+            <li>Type your question in the input field</li>
+            <li>Press Enter or click "Send"</li>
+            <li>Wait for the AI response</li>
+        </ol>
+
+        <h3>Example Questions</h3>
+        <pre><code>How do I list all files larger than 1GB in Nushell?
+
+What's the difference between 'where' and 'filter' in Nushell?
+
+Write a Nushell command to parse JSON and extract email addresses.
+
+How can I convert a CSV file to JSON in Nushell?</code></pre>
+
+        <h2>8. Choosing the Right Model</h2>
+        <ul>
+            <li><strong>GPT-4:</strong> Most accurate, best for complex questions. Slower and more expensive.</li>
+            <li><strong>GPT-4 Turbo:</strong> Faster than GPT-4, good balance of speed and quality.</li>
+            <li><strong>GPT-3.5 Turbo:</strong> Fastest and cheapest, good for simple questions.</li>
+        </ul>
+
+        <div class="tip-box">
+            <strong>💡 Tip:</strong> Start with GPT-3.5 Turbo for quick questions. Upgrade to GPT-4 
+            for complex scenarios or when you need the highest accuracy.
+        </div>
+
+        <h2>9. Cost Management</h2>
+        
+        <h3>Understanding Costs</h3>
+        <p>
+            OpenAI charges based on tokens (roughly 4 characters = 1 token):
+        </p>
+        <ul>
+            <li>GPT-4: ~$0.03 per 1K input tokens, ~$0.06 per 1K output tokens</li>
+            <li>GPT-3.5 Turbo: ~$0.0005 per 1K input tokens, ~$0.0015 per 1K output tokens</li>
+        </ul>
+
+        <h3>Cost-Saving Tips</h3>
+        <ul>
+            <li>Use GPT-3.5 for simple questions</li>
+            <li>Be concise in your prompts</li>
+            <li>Set usage limits in your OpenAI dashboard</li>
+            <li>Monitor usage regularly</li>
+        </ul>
+
+        <h2>10. Troubleshooting</h2>
+        
+        <h3>Backend Won't Start</h3>
+        <ul>
+            <li>Check Python version: <code>python --version</code> (should be 3.8+)</li>
+            <li>Verify dependencies: <code>pip install -r requirements.txt</code></li>
+            <li>Check if port 5000 is available: <code>lsof -i :5000</code></li>
+        </ul>
+
+        <h3>"Backend Not Running" Error</h3>
+        <ul>
+            <li>Ensure the backend server is running</li>
+            <li>Check browser console for CORS errors</li>
+            <li>Verify the API_BASE_URL in app.js matches your backend</li>
+        </ul>
+
+        <h3>API Key Errors</h3>
+        <ul>
+            <li>Double-check your API key in .env</li>
+            <li>Ensure your OpenAI account has credits</li>
+            <li>Verify the key has proper permissions</li>
+        </ul>
+
+        <h3>Rate Limit Errors</h3>
+        <ul>
+            <li>Wait a few minutes before retrying</li>
+            <li>Consider upgrading your OpenAI plan</li>
+            <li>Use a slower model like GPT-3.5</li>
+        </ul>
+
+        <h2>11. Advanced Usage</h2>
+        
+        <h3>Custom Prompts</h3>
+        <p>
+            Be specific to get better results:
+        </p>
+        <pre><code>❌ "How do I sort files?"
+✅ "Show me a Nushell command to sort files by size in descending order 
+   and display only the name and size columns."</code></pre>
+
+        <h3>Debugging Help</h3>
+        <p>
+            Include error messages for better assistance:
+        </p>
+        <pre><code>I ran this command: `ls | where size > 1gb`
+But I got this error: "Cannot compare int and filesize"
+How do I fix this?</code></pre>
+
+        <h2>12. Privacy and Security</h2>
+        <ul>
+            <li>Conversations are sent to OpenAI's servers for processing</li>
+            <li>Don't share sensitive information (passwords, API keys, personal data)</li>
+            <li>Review OpenAI's <a href="https://openai.com/privacy" target="_blank" style="color: var(--primary-color);">Privacy Policy</a></li>
+            <li>The integration is open source for transparency</li>
+        </ul>
+
+        <h2>13. Alternative: Web-Based Chatbot</h2>
+        <p>
+            Don't want to set up locally? Try our 
+            <a href="../chatbot/" style="color: var(--primary-color);">Live Chatbot</a> demo for a 
+            simulated experience (no API key required).
+        </p>
+
+        <h2>14. Next Steps</h2>
+        <ul>
+            <li>Try the <a href="../chatbot/" style="color: var(--primary-color);">Live Chatbot</a> demo</li>
+            <li>Join our <a href="https://discord.gg/NtAbbGn" style="color: var(--primary-color);">Discord</a> 
+                community to share tips</li>
+            <li>Explore the <a href="https://github.com/wsx7524999/nushell" style="color: var(--primary-color);">source code</a> 
+                on GitHub</li>
+        </ul>
+
+        <a href="./" class="back-link">← Back to Tutorials</a>
+    </article>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Nushell Project. Licensed under MIT License.</p>
+            <div class="footer-links">
+                <a href="https://github.com/wsx7524999/nushell">GitHub</a>
+                <a href="https://discord.gg/NtAbbGn">Discord</a>
+                <a href="https://www.nushell.sh">Official Site</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

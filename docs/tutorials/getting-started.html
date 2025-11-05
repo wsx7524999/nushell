@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started with Nushell - Tutorials - Nushell</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <style>
+        .tutorial-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .tutorial-content h2 {
+            color: var(--primary-color);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.75rem;
+        }
+        .tutorial-content h3 {
+            color: var(--text-dark);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+        .tutorial-content p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            color: var(--text-light);
+        }
+        .tutorial-content code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: var(--primary-color);
+            font-size: 0.9em;
+        }
+        .tutorial-content pre {
+            background: #2d3748;
+            color: #f7fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        .tutorial-content pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        .tutorial-content ul, .tutorial-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+        .tutorial-content li {
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            color: var(--secondary-color);
+        }
+        .tip-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+        .tip-box strong {
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>🚀 Nushell</h1>
+            </div>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="../">Home</a></li>
+                <li><a href="../blog/">Blog</a></li>
+                <li><a href="./" class="active">Tutorials</a></li>
+                <li><a href="../chatbot/">Live Chatbot</a></li>
+                <li><a href="https://github.com/wsx7524999/nushell" target="_blank">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1 class="page-title">Getting Started with Nushell</h1>
+        <p class="page-subtitle">🌱 Beginner • ⏱️ 15 minutes</p>
+    </header>
+
+    <article class="tutorial-content">
+        <a href="./" class="back-link">← Back to Tutorials</a>
+        
+        <p>
+            Welcome to Nushell! This tutorial will guide you through your first steps with this modern, 
+            structured-data shell. By the end, you'll understand the basics and be ready to explore more 
+            advanced features.
+        </p>
+
+        <h2>1. Installation</h2>
+        
+        <h3>On macOS and Linux</h3>
+        <pre><code># Using Homebrew
+brew install nushell
+
+# Or download from GitHub releases
+# https://github.com/nushell/nushell/releases</code></pre>
+
+        <h3>On Windows</h3>
+        <pre><code># Using winget
+winget install nushell
+
+# Or using Chocolatey
+choco install nushell</code></pre>
+
+        <h3>Verify Installation</h3>
+        <pre><code># Check the version
+nu --version</code></pre>
+
+        <h2>2. Starting Nushell</h2>
+        <p>
+            Simply type <code>nu</code> in your terminal to start Nushell:
+        </p>
+        <pre><code>nu</code></pre>
+
+        <p>
+            You'll see a welcome message and a prompt. Congratulations—you're now in Nushell!
+        </p>
+
+        <h2>3. Basic Navigation</h2>
+        
+        <h3>Listing Files</h3>
+        <p>
+            The <code>ls</code> command shows directory contents, but unlike traditional shells, 
+            it returns a structured table:
+        </p>
+        <pre><code>ls</code></pre>
+
+        <p>
+            Notice how the output is formatted as a table with columns like name, type, size, and modified date. 
+            This is structured data!
+        </p>
+
+        <h3>Changing Directories</h3>
+        <pre><code>cd Documents
+cd ..
+cd ~</code></pre>
+
+        <h3>Current Directory</h3>
+        <pre><code>pwd</code></pre>
+
+        <h2>4. Working with Structured Data</h2>
+        
+        <h3>Filtering Results</h3>
+        <p>
+            Here's where Nushell shines. You can filter the <code>ls</code> output like database queries:
+        </p>
+        <pre><code># Show only directories
+ls | where type == dir
+
+# Show files larger than 1MB
+ls | where size > 1mb
+
+# Show files modified in the last week
+ls | where modified > ((date now) - 7day)</code></pre>
+
+        <h3>Selecting Columns</h3>
+        <pre><code># Show only names
+ls | select name
+
+# Show name and size
+ls | select name size</code></pre>
+
+        <h3>Sorting</h3>
+        <pre><code># Sort by size
+ls | sort-by size
+
+# Sort by size in reverse order
+ls | sort-by size --reverse</code></pre>
+
+        <h2>5. File Operations</h2>
+        
+        <h3>Creating Files and Directories</h3>
+        <pre><code># Create a directory
+mkdir my-project
+
+# Create a file
+touch hello.txt
+
+# Create a file with content
+"Hello, Nushell!" | save greeting.txt</code></pre>
+
+        <h3>Copying and Moving</h3>
+        <pre><code># Copy a file
+cp source.txt destination.txt
+
+# Move a file
+mv oldname.txt newname.txt
+
+# Copy a directory
+cp -r source-dir dest-dir</code></pre>
+
+        <h3>Removing Files</h3>
+        <pre><code># Remove a file
+rm unwanted.txt
+
+# Remove a directory
+rm -r old-directory</code></pre>
+
+        <div class="tip-box">
+            <strong>💡 Tip:</strong> Nushell will ask for confirmation before deleting files by default, 
+            making it safer than traditional shells.
+        </div>
+
+        <h2>6. Reading File Contents</h2>
+        
+        <h3>Plain Text Files</h3>
+        <pre><code># View file contents
+open file.txt
+
+# View with pagination
+open large-file.txt | less</code></pre>
+
+        <h3>Structured Files</h3>
+        <p>
+            Nushell automatically parses common file formats:
+        </p>
+        <pre><code># Open JSON file (automatically parsed)
+open data.json
+
+# Open CSV file (automatically parsed as table)
+open data.csv
+
+# Open TOML configuration
+open config.toml</code></pre>
+
+        <h2>7. Your First Pipeline</h2>
+        <p>
+            Let's combine what we've learned into a powerful pipeline:
+        </p>
+        <pre><code># Find the 5 largest files in the current directory
+ls | where type == file | sort-by size --reverse | first 5 | select name size</code></pre>
+
+        <p>
+            This command:
+        </p>
+        <ol>
+            <li>Lists all items with <code>ls</code></li>
+            <li>Filters to only files with <code>where type == file</code></li>
+            <li>Sorts by size (largest first) with <code>sort-by size --reverse</code></li>
+            <li>Takes the first 5 items with <code>first 5</code></li>
+            <li>Shows only name and size columns with <code>select name size</code></li>
+        </ol>
+
+        <h2>8. Getting Help</h2>
+        <p>
+            Nushell has excellent built-in documentation:
+        </p>
+        <pre><code># Get help for any command
+help ls
+help where
+help open
+
+# List all commands
+help commands
+
+# Search for commands
+help commands | where name =~ "date"</code></pre>
+
+        <h2>9. Useful Built-in Commands</h2>
+        
+        <h3>System Information</h3>
+        <pre><code># View system information
+sys
+
+# Check CPU info
+sys cpu
+
+# Check memory usage
+sys mem</code></pre>
+
+        <h3>Process Management</h3>
+        <pre><code># List running processes
+ps
+
+# Find specific processes
+ps | where name =~ "chrome"</code></pre>
+
+        <h3>Date and Time</h3>
+        <pre><code># Current date and time
+date now
+
+# Format dates
+date now | format date "%Y-%m-%d"</code></pre>
+
+        <h2>10. Next Steps</h2>
+        <p>
+            Congratulations! You've learned the basics of Nushell. Here's what to explore next:
+        </p>
+        <ul>
+            <li><a href="data-pipelines.html" style="color: var(--primary-color);">Master Data Pipelines</a> - 
+                Learn advanced data manipulation techniques</li>
+            <li><a href="ai-integration-setup.html" style="color: var(--primary-color);">Set Up AI Integration</a> - 
+                Configure ChatGPT assistance</li>
+            <li><a href="../chatbot/" style="color: var(--primary-color);">Try the Live Chatbot</a> - 
+                Get instant help with commands</li>
+        </ul>
+
+        <div class="tip-box">
+            <strong>💡 Pro Tip:</strong> Use the Tab key for autocompletion of commands, file names, and more. 
+            It's one of Nushell's most helpful features!
+        </div>
+
+        <a href="./" class="back-link">← Back to Tutorials</a>
+    </article>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Nushell Project. Licensed under MIT License.</p>
+            <div class="footer-links">
+                <a href="https://github.com/wsx7524999/nushell">GitHub</a>
+                <a href="https://discord.gg/NtAbbGn">Discord</a>
+                <a href="https://www.nushell.sh">Official Site</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
