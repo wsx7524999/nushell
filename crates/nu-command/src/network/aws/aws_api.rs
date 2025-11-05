@@ -155,9 +155,8 @@ This functionality is only available to the repository owner through GitHub Secr
         let signature_hex = hex::encode(signature);
 
         // Build authorization header
-        let signed_headers_str = signed_headers_joined.clone();
         let authorization = format!(
-            "{algorithm} Credential={access_key}/{credential_scope}, SignedHeaders={signed_headers_str}, Signature={signature_hex}"
+            "{algorithm} Credential={access_key}/{credential_scope}, SignedHeaders={signed_headers_joined}, Signature={signature_hex}"
         );
 
         // Build the URL
