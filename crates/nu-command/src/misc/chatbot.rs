@@ -12,6 +12,7 @@ impl Command for Chatbot {
     fn signature(&self) -> Signature {
         Signature::build("chatbot")
             .input_output_types(vec![(Type::Nothing, Type::String)])
+            .allow_variants_without_examples(true)
             .required(
                 "query",
                 SyntaxShape::String,

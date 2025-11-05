@@ -11,6 +11,7 @@ impl Command for ChatbotConfig {
     fn signature(&self) -> Signature {
         Signature::build("chatbot config")
             .input_output_types(vec![(Type::Nothing, Type::String)])
+            .allow_variants_without_examples(true)
             .switch(
                 "status",
                 "Show the current chatbot configuration status",
@@ -19,7 +20,7 @@ impl Command for ChatbotConfig {
             .switch(
                 "setup",
                 "Show setup instructions for the chatbot",
-                Some('h'),
+                None,  // Remove 'h' short flag as it conflicts with help
             )
             .category(Category::Misc)
     }
