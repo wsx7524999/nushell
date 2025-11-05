@@ -2,6 +2,7 @@ use super::client::{
     azure_get_request, azure_response_to_value, create_azure_client, get_azure_subscription,
     get_azure_token,
 };
+use super::DEFAULT_COMPUTE_API_VERSION;
 use nu_engine::command_prelude::*;
 
 #[derive(Clone)]
@@ -84,7 +85,7 @@ Authentication:
         let subscription = get_azure_subscription(engine_state, call, stack)?;
         let api_version = call
             .get_flag::<String>(engine_state, stack, "api-version")?
-            .unwrap_or_else(|| "2023-03-01".to_string());
+            .unwrap_or_else(|| DEFAULT_COMPUTE_API_VERSION.to_string());
 
         let client = create_azure_client()?;
         
@@ -93,7 +94,7 @@ Authentication:
             subscription, api_version
         );
 
-        let response = azure_get_request(&client, &url, &token)?;
+        let response = azure_get_request(&client, &url, &token, call.head)?;
         let value = azure_response_to_value(response, call.head)?;
 
         Ok(PipelineData::Value(value, None))
