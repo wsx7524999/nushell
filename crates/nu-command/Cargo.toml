@@ -61,6 +61,8 @@ encoding_rs = { workspace = true }
 fancy-regex = { workspace = true }
 filesize = { workspace = true }
 filetime = { workspace = true }
+hex = "0.4"
+hmac = "0.12"
 http = {workspace = true}
 human-date-parser = { workspace = true }
 indexmap = { workspace = true }

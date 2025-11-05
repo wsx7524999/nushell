@@ -1,4 +1,6 @@
 #[cfg(feature = "network")]
+mod aws;
+#[cfg(feature = "network")]
 mod http;
 #[cfg(feature = "network")]
 mod port;
@@ -8,6 +10,8 @@ mod url;
 #[cfg(feature = "network")]
 mod version_check;
 
+#[cfg(feature = "network")]
+pub use self::aws::*;
 #[cfg(feature = "network")]
 pub use self::http::*;
 pub use self::url::*;
