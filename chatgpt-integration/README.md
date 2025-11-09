@@ -1,8 +1,116 @@
 # ChatGPT Integration for Nushell
 
-This directory contains a complete ChatGPT integration that allows users to interact with OpenAI's GPT models through a web interface.
+This directory contains a complete ChatGPT integration that allows users to interact with OpenAI's GPT models in two ways:
+1. **Native Nushell Commands** - Use chatbot commands directly in your shell
+2. **Web Interface** - Interact via a browser-based frontend
 
-## 📁 Directory Structure
+## 📚 Documentation
+
+- **[Quick Reference](QUICK_REFERENCE.md)** - Essential commands and quick tips
+- **[User Guide](NUSHELL_COMMANDS.md)** - Comprehensive guide with examples
+- **[FAQ](FAQ.md)** - Frequently asked questions and troubleshooting
+- **[Deployment Guide](DEPLOYMENT.md)** - Web interface deployment options
+
+## 🚀 Quick Start (Nushell Commands)
+
+### Prerequisites
+
+- Nushell installed
+- OpenAI API key ([Get one here](https://platform.openai.com/api-keys))
+
+### Step 1: Configure API Key
+
+Set your OpenAI API key in Nushell:
+
+```nushell
+# For current session only
+$env.OPENAI_API_KEY = "sk-your-actual-api-key-here"
+
+# OR add to your env.nu file for persistence
+# Edit $nu.env-path and add:
+$env.OPENAI_API_KEY = "sk-your-actual-api-key-here"
+```
+
+### Step 2: Verify Setup
+
+```nushell
+chatbot config --status
+```
+
+### Step 3: Start Using the Chatbot
+
+```nushell
+# Ask a general question
+chatbot "What is Nushell?"
+
+# Get help with shell commands
+chatbot --shell-help "How do I list files recursively?"
+
+# Explain an error message
+chatbot --explain-error "command not found: xyz"
+
+# Use a specific model
+chatbot --model gpt-3.5-turbo "What is the capital of France?"
+```
+
+## 📋 Nushell Command Reference
+
+### `chatbot` - Main Command
+
+Interact with an AI chatbot assistant for shell command help and general queries.
+
+**Syntax:**
+```nushell
+chatbot [query] [--model <model>] [--shell-help] [--explain-error]
+```
+
+**Flags:**
+- `--model, -m <model>`: The AI model to use (gpt-4, gpt-4-turbo, gpt-3.5-turbo)
+- `--shell-help, -s`: Get help with shell commands and Nushell syntax
+- `--explain-error, -e`: Explain a shell error message
+
+**Examples:**
+```nushell
+# General question
+chatbot "What is the capital of France?"
+
+# Shell help
+chatbot --shell-help "How do I filter a table?"
+
+# Error explanation
+chatbot --explain-error "type mismatch during operation"
+
+# Use GPT-4 for more complex queries
+chatbot --model gpt-4 "Explain closures in Nushell"
+```
+
+### `chatbot config` - Configuration Management
+
+Configure and check the status of the chatbot integration.
+
+**Syntax:**
+```nushell
+chatbot config [--status] [--setup]
+```
+
+**Flags:**
+- `--status, -s`: Show the current chatbot configuration status
+- `--setup`: Show detailed setup instructions
+
+**Examples:**
+```nushell
+# Check if chatbot is configured
+chatbot config --status
+
+# Show setup instructions
+chatbot config --setup
+```
+
+## 🌐 Web Interface (Alternative Method)
+
+For users who prefer a web interface, we also provide a browser-based chatbot.
+
+### Web Interface Directory Structure
 
 ```
 chatgpt-integration/
