@@ -1,6 +1,5 @@
 use nu_engine::command_prelude::*;
 use std::env;
-use std::io::Read;
 
 #[derive(Clone)]
 pub struct Chatbot;
@@ -115,7 +114,7 @@ fn chatbot_command(
         stack
             .get_env_var(engine_state, "OPENAI_API_KEY")
             .and_then(|v| v.clone().coerce_into_string().ok())
-            .ok_or_else(|| env::VarError::NotPresent)
+            .ok_or(env::VarError::NotPresent)
     });
 
     if api_key.is_err() || api_key.as_ref().map_or(true, |k| k.is_empty()) {
@@ -182,25 +181,25 @@ fn call_openai_api(
 
     // Make HTTP request using ureq
     let response = ureq::post("https://api.openai.com/v1/chat/completions")
-        .header("Authorization", &format!("Bearer {}", api_key))
+        .header("Authorization", &format!("Bearer {api_key}"))
         .header("Content-Type", "application/json")
         .send_json(payload);
 
     match response {
         Ok(resp) => {
-            let body = resp
-                .into_body()
+            use std::io::Read;
+            let mut body = Vec::new();
+            resp.into_body()
                 .into_reader()
-                .bytes()
-                .collect::<Result<Vec<u8>, _>>()
-                .map_err(|e| format!("Failed to read response: {}", e))?;
+                .read_to_end(&mut body)
+                .map_err(|e| format!("Failed to read response: {e}"))?;
 
             let body_str =
-                String::from_utf8(body).map_err(|e| format!("Failed to decode response: {}", e))?;
+                String::from_utf8(body).map_err(|e| format!("Failed to decode response: {e}"))?;
 
             // Parse the JSON response
             let json: serde_json::Value = serde_json::from_str(&body_str)
-                .map_err(|e| format!("Failed to parse response: {}", e))?;
+                .map_err(|e| format!("Failed to parse response: {e}"))?;
 
             // Extract the message content with proper error handling
             let choices = json["choices"]
@@ -226,8 +225,8 @@ fn call_openai_api(
                 ureq::Error::ConnectionFailed => {
                     Err("Connection failed. Check your internet connection.".to_string())
                 }
-                ureq::Error::Io(io_err) => Err(format!("I/O error: {}", io_err)),
-                _ => Err(format!("API error: {}", e)),
+                ureq::Error::Io(io_err) => Err(format!("I/O error: {io_err}")),
+                _ => Err(format!("API error: {e}")),
             }
         }
     }

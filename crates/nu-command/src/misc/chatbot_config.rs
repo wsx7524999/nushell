@@ -127,7 +127,7 @@ For more information, visit:
             stack
                 .get_env_var(engine_state, "OPENAI_API_KEY")
                 .and_then(|v| v.clone().coerce_into_string().ok())
-                .ok_or_else(|| std::env::VarError::NotPresent)
+                .ok_or(std::env::VarError::NotPresent)
         });
 
         let status_text = match api_key {
@@ -146,7 +146,7 @@ For more information, visit:
 
 Status: ✓ CONFIGURED
 
-API Key: {} (masked)
+API Key: {masked_key} (masked)
 Ready to use: Yes
 
 Try it out:
@@ -155,13 +155,11 @@ Try it out:
 
 To see setup instructions:
   chatbot config --setup
-"#,
-                    masked_key
+"#
                 )
             }
             _ => {
-                format!(
-                    r#"
+                r#"
 ╭─────────────────────────────────────────────╮
 │   Chatbot Configuration Status             │
 ╰─────────────────────────────────────────────╯
@@ -181,8 +179,7 @@ Quick setup:
 
 Get your API key from:
   https://platform.openai.com/api-keys
-"#
-                )
+"#.to_string()
             }
         };
 
