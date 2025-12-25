@@ -5,7 +5,7 @@
 //!
 //! See [`tls`] for how to get a TLS connector.
 
-#[cfg(feature = "native-tls")]
+#[cfg(all(feature = "native-tls", not(feature = "rustls-tls")))]
 #[path = "impl_native_tls.rs"]
 mod impl_tls;
 

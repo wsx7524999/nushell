@@ -20,7 +20,7 @@ impl Command for ChatbotConfig {
             .switch(
                 "setup",
                 "Show setup instructions for the chatbot",
-                None,  // No short flag to avoid conflict with help (-h)
+                None, // No short flag to avoid conflict with help (-h)
             )
             .category(Category::Misc)
     }
@@ -74,10 +74,10 @@ fn chatbot_config_command(
     call: &Call,
 ) -> Result<PipelineData, ShellError> {
     let span = call.head;
-    
+
     let status: bool = call.has_flag(engine_state, stack, "status")?;
     let setup: bool = call.has_flag(engine_state, stack, "setup")?;
-    
+
     if setup {
         let setup_text = r#"
 ╭─────────────────────────────────────────────╮
@@ -121,7 +121,7 @@ For more information, visit:
 "#;
         return Ok(Value::string(setup_text, span).into_pipeline_data());
     }
-    
+
     if status {
         let api_key = std::env::var("OPENAI_API_KEY").or_else(|_| {
             stack
@@ -129,16 +129,17 @@ For more information, visit:
                 .and_then(|v| v.clone().coerce_into_string().ok())
                 .ok_or_else(|| std::env::VarError::NotPresent)
         });
-        
+
         let status_text = match api_key {
             Ok(key) if !key.is_empty() => {
                 let masked_key = if key.len() > 8 {
-                    format!("{}...{}", &key[0..4], &key[key.len()-4..])
+                    format!("{}...{}", &key[0..4], &key[key.len() - 4..])
                 } else {
                     "****".to_string()
                 };
-                
-                format!(r#"
+
+                format!(
+                    r#"
 ╭─────────────────────────────────────────────╮
 │   Chatbot Configuration Status             │
 ╰─────────────────────────────────────────────╯
@@ -154,10 +155,13 @@ Try it out:
 
 To see setup instructions:
   chatbot config --setup
-"#, masked_key)
+"#,
+                    masked_key
+                )
             }
             _ => {
-                format!(r#"
+                format!(
+                    r#"
 ╭─────────────────────────────────────────────╮
 │   Chatbot Configuration Status             │
 ╰─────────────────────────────────────────────╯
@@ -177,13 +181,14 @@ Quick setup:
 
 Get your API key from:
   https://platform.openai.com/api-keys
-"#)
+"#
+                )
             }
         };
-        
+
         return Ok(Value::string(status_text, span).into_pipeline_data());
     }
-    
+
     // Default: show brief help
     let default_text = r#"
 ╭─────────────────────────────────────────────╮
@@ -199,7 +204,7 @@ Examples:
   chatbot config --status
   chatbot config --setup
 "#;
-    
+
     Ok(Value::string(default_text, span).into_pipeline_data())
 }
 
