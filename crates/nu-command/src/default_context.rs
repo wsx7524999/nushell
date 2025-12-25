@@ -97,11 +97,16 @@ pub fn add_shell_command_context(mut engine_state: EngineState) -> EngineState {
 
         // Misc
         bind_command! {
-            Chatbot,
-            ChatbotConfig,
             Panic,
             Source,
             Tutor,
+        };
+
+        // Misc - Network-dependent
+        #[cfg(feature = "network")]
+        bind_command! {
+            Chatbot,
+            ChatbotConfig,
         };
 
         // Path
