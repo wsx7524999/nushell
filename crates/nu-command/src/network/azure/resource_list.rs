@@ -1,8 +1,8 @@
+use super::DEFAULT_ARM_API_VERSION;
 use super::client::{
     azure_get_request, azure_response_to_value, create_azure_client, get_azure_subscription,
     get_azure_token,
 };
-use super::DEFAULT_ARM_API_VERSION;
 use nu_engine::command_prelude::*;
 
 #[derive(Clone)]
@@ -88,7 +88,7 @@ Authentication:
             .unwrap_or_else(|| DEFAULT_ARM_API_VERSION.to_string());
 
         let client = create_azure_client()?;
-        
+
         let url = format!(
             "https://management.azure.com/subscriptions/{subscription}/resources?api-version={api_version}"
         );
