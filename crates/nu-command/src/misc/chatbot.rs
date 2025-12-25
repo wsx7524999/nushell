@@ -189,7 +189,8 @@ fn call_openai_api(
     match response {
         Ok(resp) => {
             let mut body = Vec::new();
-            std::io::BufReader::new(resp.into_body().into_reader())
+            resp.into_body()
+                .into_reader()
                 .read_to_end(&mut body)
                 .map_err(|e| format!("Failed to read response: {e}"))?;
 
