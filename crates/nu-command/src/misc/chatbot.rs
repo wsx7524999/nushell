@@ -17,7 +17,7 @@ impl Command for Chatbot {
             .required(
                 "query",
                 SyntaxShape::String,
-                "The question or command to ask the chatbot",
+                "The question or command to ask the chatbot.",
             )
             .named(
                 "model",
@@ -39,7 +39,7 @@ impl Command for Chatbot {
     }
 
     fn description(&self) -> &str {
-        "Interact with an AI chatbot assistant for shell command help and general queries"
+        "Interact with an AI chatbot assistant for shell command help and general queries."
     }
 
     fn extra_description(&self) -> &str {

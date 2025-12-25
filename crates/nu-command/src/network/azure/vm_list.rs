@@ -56,7 +56,7 @@ Authentication:
     }
 
     fn search_terms(&self) -> Vec<&str> {
-        vec!["azure", "cloud", "vm", "virtual", "machine", "compute"]
+        vec!["cloud", "virtual", "machine", "compute"]
     }
 
     fn examples(&self) -> Vec<Example> {

@@ -26,7 +26,7 @@ impl Command for ChatbotConfig {
     }
 
     fn description(&self) -> &str {
-        "Configure and check the status of the chatbot integration"
+        "Configure and check the status of the chatbot integration."
     }
 
     fn extra_description(&self) -> &str {
@@ -39,7 +39,7 @@ The chatbot uses the OpenAI API and requires an API key to function."#
     }
 
     fn search_terms(&self) -> Vec<&str> {
-        vec!["config", "setup", "configure", "chatbot", "ai"]
+        vec!["setup", "configure", "ai"]
     }
 
     fn run(
