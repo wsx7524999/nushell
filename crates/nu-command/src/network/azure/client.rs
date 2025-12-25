@@ -11,12 +11,12 @@ pub fn get_azure_token(
     if let Some(token_val) = call.get_flag::<String>(engine_state, stack, "token")? {
         return Ok(token_val);
     }
-    
+
     // Try environment variable AZURE_ACCESS_TOKEN
     if let Ok(token) = std::env::var("AZURE_ACCESS_TOKEN") {
         return Ok(token);
     }
-    
+
     Err(ShellError::GenericError {
         error: "Azure authentication required".into(),
         msg: "No Azure access token provided".into(),
@@ -36,17 +36,19 @@ pub fn get_azure_subscription(
     if let Some(sub_val) = call.get_flag::<String>(engine_state, stack, "subscription")? {
         return Ok(sub_val);
     }
-    
+
     // Try environment variable AZURE_SUBSCRIPTION_ID
     if let Ok(subscription) = std::env::var("AZURE_SUBSCRIPTION_ID") {
         return Ok(subscription);
     }
-    
+
     Err(ShellError::GenericError {
         error: "Azure subscription ID required".into(),
         msg: "No Azure subscription ID provided".into(),
         span: Some(call.head),
-        help: Some("Set AZURE_SUBSCRIPTION_ID environment variable or use --subscription flag".into()),
+        help: Some(
+            "Set AZURE_SUBSCRIPTION_ID environment variable or use --subscription flag".into(),
+        ),
         inner: vec![],
     })
 }
@@ -56,7 +58,7 @@ pub fn create_azure_client() -> Result<Agent, ShellError> {
     let config = ureq::config::Config::builder()
         .user_agent("nushell-azure-client")
         .build();
-    
+
     Ok(ureq::Agent::new_with_config(config))
 }
 
@@ -76,18 +78,22 @@ pub fn azure_get_request(
             msg: format!("Azure API request failed: {e}"),
             span,
         })?;
-    
+
     let status = response.status();
     if status != 200 {
-        let body = response.body_mut().read_to_string()
+        let body = response
+            .body_mut()
+            .read_to_string()
             .unwrap_or_else(|_| "Failed to read error response body from Azure API".to_string());
         return Err(ShellError::NetworkFailure {
             msg: format!("Azure API returned status {status}: {body}"),
             span,
         });
     }
-    
-    response.body_mut().read_json()
+
+    response
+        .body_mut()
+        .read_json()
         .map_err(|e| ShellError::GenericError {
             error: "Failed to parse Azure API response".into(),
             msg: format!("JSON parsing error: {e}"),
@@ -111,10 +117,8 @@ pub fn azure_response_to_value(
             Ok(Value::record(record, span))
         }
         serde_json::Value::Array(arr) => {
-            let values: Result<Vec<_>, _> = arr
-                .into_iter()
-                .map(|v| json_to_value(v, span))
-                .collect();
+            let values: Result<Vec<_>, _> =
+                arr.into_iter().map(|v| json_to_value(v, span)).collect();
             Ok(Value::list(values?, span))
         }
         _ => json_to_value(json_value, span),
@@ -137,10 +141,8 @@ fn json_to_value(json: serde_json::Value, span: Span) -> Result<Value, ShellErro
         }
         serde_json::Value::String(s) => Ok(Value::string(s, span)),
         serde_json::Value::Array(arr) => {
-            let values: Result<Vec<_>, _> = arr
-                .into_iter()
-                .map(|v| json_to_value(v, span))
-                .collect();
+            let values: Result<Vec<_>, _> =
+                arr.into_iter().map(|v| json_to_value(v, span)).collect();
             Ok(Value::list(values?, span))
         }
         serde_json::Value::Object(map) => {
