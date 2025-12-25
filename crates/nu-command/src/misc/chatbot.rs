@@ -1,5 +1,6 @@
 use nu_engine::command_prelude::*;
 use std::env;
+use std::io::Read;
 
 #[derive(Clone)]
 pub struct Chatbot;
@@ -187,7 +188,6 @@ fn call_openai_api(
 
     match response {
         Ok(resp) => {
-            use std::io::Read;
             let mut body = Vec::new();
             resp.into_body()
                 .into_reader()
