@@ -188,9 +188,9 @@ fn call_openai_api(
 
     match response {
         Ok(resp) => {
-            let body = std::io::BufReader::new(resp.into_body().into_reader())
-                .bytes()
-                .collect::<Result<Vec<u8>, _>>()
+            let mut body = Vec::new();
+            std::io::BufReader::new(resp.into_body().into_reader())
+                .read_to_end(&mut body)
                 .map_err(|e| format!("Failed to read response: {e}"))?;
 
             let body_str =
