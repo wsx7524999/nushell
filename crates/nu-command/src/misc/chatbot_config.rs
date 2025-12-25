@@ -158,8 +158,7 @@ To see setup instructions:
 "#
                 )
             }
-            _ => {
-                r#"
+            _ => r#"
 ╭─────────────────────────────────────────────╮
 │   Chatbot Configuration Status             │
 ╰─────────────────────────────────────────────╯
@@ -179,8 +178,8 @@ Quick setup:
 
 Get your API key from:
   https://platform.openai.com/api-keys
-"#.to_string()
-            }
+"#
+            .to_string(),
         };
 
         return Ok(Value::string(status_text, span).into_pipeline_data());
