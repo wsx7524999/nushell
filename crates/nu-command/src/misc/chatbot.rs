@@ -1,5 +1,6 @@
 use nu_engine::command_prelude::*;
 use std::env;
+use std::io::Read;
 
 #[derive(Clone)]
 pub struct Chatbot;
@@ -188,17 +189,11 @@ fn call_openai_api(
 
     match response {
         Ok(resp) => {
-            use std::io::BufRead;
-            let reader = std::io::BufReader::new(resp.into_body().into_reader());
-            let body: Vec<u8> = reader
-                .lines()
-                .collect::<Result<Vec<_>, _>>()
-                .map_err(|e| format!("Failed to read response: {e}"))?
-                .join("\n")
-                .into_bytes();
-
-            let body_str =
-                String::from_utf8(body).map_err(|e| format!("Failed to decode response: {e}"))?;
+            let mut body_str = String::new();
+            resp.into_body()
+                .into_reader()
+                .read_to_string(&mut body_str)
+                .map_err(|e| format!("Failed to read response: {e}"))?;
 
             // Parse the JSON response
             let json: serde_json::Value = serde_json::from_str(&body_str)
